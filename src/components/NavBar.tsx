@@ -1,5 +1,6 @@
 import { Castle, ChartCandlestick, CircleUser, Headset, House, LayoutDashboard } from 'lucide-react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 
 const NavBar = () => {
@@ -10,7 +11,7 @@ const NavBar = () => {
                 <h3 className="py-2 px-4  bg-customBlue font-bree rounded-md"><span className='flex items-center'>Kirinyaga Market <ChartCandlestick size={20} className='ml-3' /></span></h3>
             </div>
             <div className="flex w-2/5 justify-between">
-                <button className="bg-customBtn  py-2 px-4 rounded hover:bg-blue-600"><span className='flex items-center'> <House size={16} className='mr-2'/>Home</span></button>
+                <Link to='/' className="bg-customBtn  py-2 px-4 rounded hover:bg-blue-600"><span className='flex items-center'> <House size={16} className='mr-2'/>Home</span></Link>
                 <button className="bg-customBtn  py-2 px-4 rounded hover:bg-blue-600">Items</button>
                 <button className="bg-customBtn  py-2 px-4 rounded hover:bg-blue-600"><span className='flex items-center'><Castle size={16} className='mr-2'/>House</span></button>
                 <button className="bg-customBtn  py-2 px-4 rounded hover:bg-blue-600"><span className='flex items-center'><Headset size={16} className='mr-2'/>Contact</span></button>
@@ -21,12 +22,12 @@ const NavBar = () => {
             </div>
             {showAuth && (
                 <div className="absolute top-20 right-0 w-48 shadow-lg rounded-md mt-1  p-1 z-50" style={{backgroundColor: '#F2CD1F'}}>
-                <button className="w-full hover:bg-gray-700 py-2 px-4 rounded mb-2 bg-gray-600 text-white" >
+                <Link to='/auth' className="w-full block hover:bg-gray-700 py-2 px-4 rounded mb-2 bg-gray-600 text-white" >
                     Register
-                </button>
-                <button className="w-full bg-gray-600 py-2 px-4 rounded hover:bg-gray-700 text-white">
+                </Link>
+                <Link to='/auth' className="w-full bg-gray-600 py-2 px-4 rounded block hover:bg-gray-700 text-white">
                     Login
-                </button>
+                </Link>
                 </div>
             )}
         </div>
