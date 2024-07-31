@@ -290,7 +290,6 @@ const Auth = () => {
             console.log("Login Data:", loginInfo)
         } else {
             sendRegister(registerInfo)
-            console.log("Register Data:", registerInfo)
         }
     }
 
