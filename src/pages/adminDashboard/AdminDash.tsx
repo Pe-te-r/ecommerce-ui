@@ -8,7 +8,8 @@ const AdminDashboard = () => {
             <NavBar/>
         <div className="flex h-screen ">
             <Sidebar />
-            <div className="flex-1 bg-gray-100 p-4">
+            <div className="flex-1 bg-gray-1
+            00 p-4">
                 <Outlet />
             </div>
         </div>

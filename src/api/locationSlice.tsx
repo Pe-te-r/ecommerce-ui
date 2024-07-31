@@ -15,10 +15,17 @@ export const locationApi  = createApi({
                 body: location
             }),
         }),
-        deleteLocation: builder.mutation<any,number>({
-            query: (id: number)=> ({
+        deleteLocation: builder.mutation<any,string>({
+            query: (id: string)=> ({
                 url: `locations/${id}`,
                 method: 'DELETE',
+            }),
+        }),
+        editLocation: builder.mutation<any,any>({
+            query: (location: any)=> ({
+                url: `locations/${location.id}`,
+                method: 'PUT',
+                body: location
             }),
         })
     })
@@ -27,7 +34,9 @@ export const locationApi  = createApi({
 type UseFetchLocationQuery = typeof locationApi.endpoints.fetchLocation.useQuery
 type UseAddLocationQuery = typeof locationApi.endpoints.addLocation.useMutation
 type UseDeleteLocationQuery = typeof locationApi.endpoints.deleteLocation.useMutation
+type UseEditLocationQuery = typeof locationApi.endpoints.editLocation.useMutation
 
 export const UseFetchLocationQuery: UseFetchLocationQuery = locationApi.endpoints.fetchLocation.useQuery
 export const UseAddLocationQuery: UseAddLocationQuery = locationApi.endpoints.addLocation.useMutation
 export const UseDeleteLocationQuery: UseDeleteLocationQuery = locationApi.endpoints.deleteLocation.useMutation
+export const UseEditLocationQuery: UseEditLocationQuery = locationApi.endpoints.editLocation.useMutation
