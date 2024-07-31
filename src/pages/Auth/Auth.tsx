@@ -1,23 +1,17 @@
 import NavBar from "../../components/NavBar"
 import image from '../../assets/Login.jpeg'
 import InputDiv from "../../components/InputDiv"
-import { Form } from "react-router-dom"
+import { Form, useNavigate } from "react-router-dom"
 import { LogIn } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { UseLoginUserMutationL, UseRegisterUserMutation } from "../../api/auth&usersSlice"
+import Loading from "../../Loading/Loading"
+import { useDispatch } from "react-redux"
+import { addToast } from "../../features/toastSlice"
 
 const Auth = () => {
-    const [login, setLogin] = useState(false)
-    const [currentStep, setCurrentStep] = useState(1)
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        if (login) {
-            console.log("Login Data:", loginInfo)
-        } else {
-            console.log("Register Data:", registerInfo)
-        }
-    }
-
+    const navigate = useNavigate()
+    const dispatch = useDispatch();
     const loginData = {
         email: '',
         password: ''
@@ -35,6 +29,37 @@ const Auth = () => {
 
     const [loginInfo, setLoginData] = useState(loginData)
     const [registerInfo, setRegisterData] = useState(registerData)
+    const [sendRegister, { data: registerResult, isSuccess: registerSuccess }] = UseRegisterUserMutation()
+    const [login, setLogin] = useState(true)
+    
+    useEffect(() => {
+        if (registerResult && registerSuccess) {
+            if (registerResult?.results) {
+                dispatch(addToast({ id: Date.now(),message: "Registered successfully! Now login", type: 'success' }));
+                setLogin(true)
+            } else if (registerResult?.error) {
+                dispatch(addToast({ id: Date.now(),message: registerResult.error, type: 'error' }));
+            }
+        }
+    }, [registerResult, registerSuccess])
+    
+    const [loginUser, { data: loginReslts, isSuccess: loginSucccess, error: loginErrorData, isLoading: LoginLoading, isError: loginError }] = UseLoginUserMutationL()
+
+    useEffect(() => {
+        if (loginReslts && loginSucccess) {
+            if (loginReslts?.error) {
+                dispatch(addToast({ id: Date.now(),message: loginReslts.error, type: 'error' }));
+            } else if (loginReslts?.results) {
+                dispatch(addToast({ id: Date.now(),message: 'Logged in successfully!', type: 'success' }));
+                navigate('/')
+            }
+        }
+        if (loginError) {
+            console.log(loginErrorData)
+        }
+    }, [loginReslts, loginSucccess, loginError])
+
+    const [currentStep, setCurrentStep] = useState(1)
 
     const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
         const { name, value } = e.currentTarget
@@ -45,12 +70,25 @@ const Auth = () => {
         }
     }
 
-    const handleNext = () => {
+    const handleNext = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
         setCurrentStep(currentStep + 1)
     }
 
-    const handlePrev = () => {
+    const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
         setCurrentStep(currentStep - 1)
+    }
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault()
+        if (login) {
+            loginUser(loginInfo)
+            console.log("Login Data:", loginInfo)
+        } else {
+            sendRegister(registerInfo)
+            console.log("Register Data:", registerInfo)
+        }
     }
 
     return (
@@ -71,13 +109,13 @@ const Auth = () => {
                                 <>
                                     <InputDiv label="First Name" type="text" name="first_name" value={registerInfo.first_name} onChange={handleChange} />
                                     <InputDiv label="Last Name" type="text" name="last_name" value={registerInfo.last_name} onChange={handleChange} />
-                                    <InputDiv label="Username" type="text" name="userName" value={registerInfo.userName} onChange={handleChange} />
+                                    <InputDiv label="Phone" type="text" name="phone" value={registerInfo.phone} onChange={handleChange} />
                                 </>
                             )}
                             {currentStep === 2 && (
                                 <>
-                                    <InputDiv label="Phone" type="text" name="phone" value={registerInfo.phone} onChange={handleChange} />
                                     <InputDiv label="Email" type="email" name="email" value={registerInfo.email} onChange={handleChange} />
+                                <InputDiv label="Username" type="text" name="userName" value={registerInfo.userName} onChange={handleChange} />
                                 </>
                             )}
                             {currentStep === 3 && (
@@ -89,16 +127,15 @@ const Auth = () => {
                         </>
                     )}
                     <div className="w-4/5 mx-auto flex justify-between pt-2 pb-2 relative">
-                    {
-                    
-                        currentStep <= 1 &&
-                        <button onClick={() => setLogin(!login)} type="button" className="bg-gray-500 py-2 px-4 rounded hover:bg-blue-600 absolute left-2">
-                            <span className='flex items-center'><LogIn size={16} className='mr-2' />{login ? "Register now" : "Login now"}</span>
-                        </button>
-}
+                        {
+                            currentStep <= 1 &&
+                            <button onClick={() => setLogin(!login)} type="button" className="bg-gray-500 py-2 px-4 rounded hover:bg-blue-600 absolute left-2">
+                                <span className='flex items-center'><LogIn size={16} className='mr-2' />{login ? "Register now" : "Login now"}</span>
+                            </button>
+                        }
                         {login ? (
                             <button type="submit" className="bg-customLoginBtn py-2 px-4 rounded hover:bg-blue-600 absolute right-2">
-                                <span className='flex items-center'><LogIn size={16} className='mr-2' />Login now</span>
+                                <span className='flex items-center'><LogIn size={16} className='mr-2' />{LoginLoading ? <Loading /> : 'Login now'}</span>
                             </button>
                         ) : (
                             <div className="flex justify-between w-full">
@@ -107,7 +144,7 @@ const Auth = () => {
                                         Previous
                                     </button>
                                 )}
-                                {currentStep < 3 ? (
+                                {currentStep <= 2 ? (
                                     <button type="button" onClick={handleNext} className="bg-customLoginBtn py-2 px-4 right-2 absolute rounded hover:bg-blue-600">
                                         Next
                                     </button>
@@ -126,6 +163,7 @@ const Auth = () => {
                     </div>
                 </Form>
             </div>
+            {/* <Toaster /> */}
         </div>
     )
 }

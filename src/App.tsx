@@ -8,6 +8,7 @@ function App() {
     { path: '/auth', element: <Auth/> }
   ])
   return (
+    
     <div>
       <RouterProvider router={routes}/>
     </div>
