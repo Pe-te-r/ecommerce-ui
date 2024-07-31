@@ -15,7 +15,7 @@ const NavBar = () => {
                 <button className="bg-customBtn  py-2 px-4 rounded hover:bg-blue-600">Items</button>
                 <button className="bg-customBtn  py-2 px-4 rounded hover:bg-blue-600"><span className='flex items-center'><Castle size={16} className='mr-2'/>House</span></button>
                 <button className="bg-customBtn  py-2 px-4 rounded hover:bg-blue-600"><span className='flex items-center'><Headset size={16} className='mr-2'/>Contact</span></button>
-                <button className="bg-customBtn  py-2 px-4 rounded hover:bg-blue-600"><span className='flex items-center'><LayoutDashboard size={16} className='mr-2'/>Dashboard </span></button>
+                <Link to='/admin' className="bg-customBtn  py-2 px-4 rounded hover:bg-blue-600"><span className='flex items-center'><LayoutDashboard size={16} className='mr-2'/>Dashboard </span></Link>
             </div>
             <div>
                 <button className='bg-customLogin py-2 px-4 rounded hover:bg-green-600' onClick={()=>setShowAuth(!showAuth)}><span className='flex items-center'><CircleUser size={16} className='mr-2'/>Account</span></button>

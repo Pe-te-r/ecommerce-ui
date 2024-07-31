@@ -88,7 +88,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { RootState } from '../store/store';
-import { removeToast } from '../features/toastSlice';
+import { removeToast } from '../features/toast/toastSlice';
 
 const Toaster = () => {
   const toasts = useSelector((state: RootState) => state.toast.toasts);
