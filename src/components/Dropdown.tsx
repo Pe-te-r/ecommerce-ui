@@ -7,6 +7,7 @@ const CustomDropdown = ({ options, value, onChange }: any) => {
         onChange(option.id);
         setIsOpen(false);
     };
+    
 
     return (
         <div className="relative inline-block font-sans w-4/5 mx-auto">
